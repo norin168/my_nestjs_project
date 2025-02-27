@@ -1,3 +1,5 @@
+// The unit tests for the controller.
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -15,8 +17,8 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return "Hello My Beb"', () => {
+      expect(appController.getHello()).toBe('Hello My Beb');
     });
   });
 });
