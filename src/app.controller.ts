@@ -1,3 +1,5 @@
+//A basic controller with a single route.
+
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 
