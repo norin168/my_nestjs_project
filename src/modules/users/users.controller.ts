@@ -1,5 +1,17 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  ParseIntPipe,
+  Query,
+  ParseBoolPipe,
+  Patch,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/createUser.dto';
+import { ParseIdPipe } from './pipes/parseId.pipes';
 
 @Controller('users')
 export class UsersController {
@@ -11,12 +23,24 @@ export class UsersController {
   }
 
   @Get(':id')
-  findAny(@Param('id') id: string) {
-    return this.usersService.findAny(+id);
+  findUserID(
+    @Param('id', ParseIntPipe) id,
+    @Query('sort', ParseBoolPipe) sort,
+  ) {
+    console.log(typeof id);
+
+    console.log(typeof sort);
+
+    return id;
   }
 
-  @Post()
-  create(@Body() createUserDto: { name: string; email: string }) {
-    return this.usersService.create(createUserDto);
+  @Post('create')
+  create(@Body() body: CreateUserDto) {
+    return body;
+  }
+
+  @Patch('update/:id')
+  update(@Param('id', ParseIdPipe) id, @Body() body: CreateUserDto) {
+    return body;
   }
 }

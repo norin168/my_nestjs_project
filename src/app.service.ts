@@ -1,4 +1,5 @@
 // A basic service with a single method.
+// Business Logic
 
 import { Injectable } from '@nestjs/common';
 
