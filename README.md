@@ -69,7 +69,7 @@ $ npm run start:prod
 
 ## Run tests
 
-<!-- ```bash
+```bash
 # unit tests
 $ npm run test
 
@@ -78,22 +78,43 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
-``` -->
+```
 
 ## Deployment
 
-<!-- ```bash
+```bash
 $ npm install -g mau
 $ mau deploy
-``` -->
+```
 
-## Resources
+## CMD (Replace name with your Folder Name)
 
-## Support
+```bash
+#Create Module
+$ nest g module name
 
-## Stay in touch
+# Create Controller
+$ nest g co name
 
-## License
+# Create service
+$ nest g s name
+
+# Create service with no testing file
+$ nest g s name --no-spec
+
+# Create Res (Module,Controller,Service,Entity ...)
+$ nest g res name
+
+# Create Res (Module,Controller,Service,Entity ... with no testing file)
+$ nest g res name --no-spec
+```
+
+## Dependency
+
+```bash
+# Install TypeORM and Database
+$ npm install --save @nestjs/typeorm typeorm pg
+```
 
 ---
 

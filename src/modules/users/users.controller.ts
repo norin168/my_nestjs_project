@@ -8,10 +8,13 @@ import {
   Query,
   ParseBoolPipe,
   Patch,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/createUser.dto';
-import { ParseIdPipe } from './pipes/parseId.pipes';
+import { createUserSchema, CreateUserZodDto } from './dto/create_user.dto';
+import { ZodValidationPipe } from './pipes/zod_validation_pipes';
+import { HeaderDto } from './dto/header.dto';
+import { HeaderRequest } from './pipes/header_request';
 
 @Controller('users')
 export class UsersController {
@@ -27,20 +30,25 @@ export class UsersController {
     @Param('id', ParseIntPipe) id,
     @Query('sort', ParseBoolPipe) sort,
   ) {
-    console.log(typeof id);
-
-    console.log(typeof sort);
-
-    return id;
+    return this.usersService.findUserID();
   }
 
   @Post('create')
-  create(@Body() body: CreateUserDto) {
-    return body;
+  create(@Body(new ZodValidationPipe(createUserSchema)) dto: CreateUserZodDto) {
+    return this.usersService.create(dto);
   }
 
   @Patch('update/:id')
-  update(@Param('id', ParseIdPipe) id, @Body() body: CreateUserDto) {
-    return body;
+  update(
+    @Param('id') id,
+    @Body(new ZodValidationPipe(createUserSchema)) body: CreateUserZodDto,
+    @HeaderRequest(
+      new ValidationPipe({
+        validateCustomDecorators: true,
+      }),
+    )
+    header: HeaderDto,
+  ) {
+    return this.usersService.update();
   }
 }
