@@ -5,16 +5,16 @@ import {
   Param,
   Body,
   ParseIntPipe,
-  Query,
-  ParseBoolPipe,
   Patch,
   ValidationPipe,
+  Query,
+  Delete,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { createUserSchema, CreateUserZodDto } from './dto/create_user.dto';
 import { ZodValidationPipe } from './pipes/zod_validation_pipes';
 import { HeaderDto } from './dto/header.dto';
 import { HeaderRequest } from './pipes/header_request';
+import { createUserSchema, CreateUserZodDto } from './dto/create_user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -25,17 +25,22 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  findUserID(
-    @Param('id', ParseIntPipe) id,
-    @Query('sort', ParseBoolPipe) sort,
-  ) {
-    return this.usersService.findUserID();
+  @Get('find')
+  findUserID(@Query('id', ParseIntPipe) id: number) {
+    return this.usersService.findUserID(id);
   }
 
   @Post('create')
-  create(@Body(new ZodValidationPipe(createUserSchema)) dto: CreateUserZodDto) {
-    return this.usersService.create(dto);
+  async create(
+    @Body(new ZodValidationPipe(createUserSchema))
+    createUserDto: CreateUserZodDto,
+  ) {
+    const user = await this.usersService.create(createUserDto);
+
+    return {
+      success: true,
+      data: user,
+    };
   }
 
   @Patch('update/:id')
@@ -49,6 +54,11 @@ export class UsersController {
     )
     header: HeaderDto,
   ) {
-    return this.usersService.update();
+    return this.usersService.update(id, body);
+  }
+
+  @Delete('delete/:id')
+  delete(@Param('id') id) {
+    return this.usersService.delete(id);
   }
 }

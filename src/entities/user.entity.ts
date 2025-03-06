@@ -1,3 +1,4 @@
+import { IsEmail } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -11,13 +12,13 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ length: 15 })
   firstName: string;
 
-  @Column()
+  @Column({ length: 15 })
   lastName: string;
 
-  @Column({ unique: true })
+  @Column({ length: 15 })
   username: string;
 
   @Column()
@@ -26,8 +27,11 @@ export class UserEntity {
   @Column()
   phone: number;
 
-  @Column({ nullable: true })
+  @Column({ length: 40 })
   email: string;
+
+  @Column({ type: 'enum', enum: ['Admin', 'User'] })
+  role: string;
 
   @CreateDateColumn()
   createdAt: Date;
