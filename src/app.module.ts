@@ -5,10 +5,21 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { pgConfig } from './config/db_config';
+import { ConfigModule } from '@nestjs/config';
+import dbConfig from './config/db_config';
 
 @Module({
-  imports: [UsersModule, TypeOrmModule.forRoot(pgConfig)],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
+    TypeOrmModule.forRootAsync({
+      useFactory: dbConfig,
+    }),
+
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

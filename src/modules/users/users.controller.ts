@@ -6,15 +6,14 @@ import {
   Body,
   ParseIntPipe,
   Patch,
-  ValidationPipe,
   Query,
   Delete,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ZodValidationPipe } from './pipes/zod_validation_pipes';
-import { HeaderDto } from './dto/header.dto';
-import { HeaderRequest } from './pipes/header_request';
-import { createUserSchema, CreateUserZodDto } from './dto/create_user.dto';
+import { UpdateUserDto } from './dto/update_user.dto';
+import { CustomValidationPipe } from './pipes/custom_validation_pipe';
+import { CreateUserDto } from './dto/create_user.dto';
+import { DeleteUserDto } from './dto/delete_user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -32,8 +31,8 @@ export class UsersController {
 
   @Post('create')
   async create(
-    @Body(new ZodValidationPipe(createUserSchema))
-    createUserDto: CreateUserZodDto,
+    @Body(new CustomValidationPipe(CreateUserDto))
+    createUserDto: CreateUserDto,
   ) {
     const user = await this.usersService.create(createUserDto);
 
@@ -43,22 +42,14 @@ export class UsersController {
     };
   }
 
+  //create update with typeORM
   @Patch('update/:id')
-  update(
-    @Param('id') id,
-    @Body(new ZodValidationPipe(createUserSchema)) body: CreateUserZodDto,
-    @HeaderRequest(
-      new ValidationPipe({
-        validateCustomDecorators: true,
-      }),
-    )
-    header: HeaderDto,
-  ) {
+  update(@Param('id', ParseIntPipe) id, @Body() body: UpdateUserDto) {
     return this.usersService.update(id, body);
   }
 
   @Delete('delete/:id')
-  delete(@Param('id') id) {
-    return this.usersService.delete(id);
+  async delete(@Body() deleteUserDto: DeleteUserDto) {
+    return this.usersService.delete(deleteUserDto.id);
   }
 }
