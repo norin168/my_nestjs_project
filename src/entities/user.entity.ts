@@ -25,16 +25,16 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 15 })
+  @Column({ length: 15, nullable: false })
   firstName: string;
 
-  @Column({ length: 15 })
+  @Column({ length: 15, nullable: false })
   lastName: string;
 
-  @Column({ length: 15 })
+  @Column({ length: 15, nullable: false })
   username: string;
 
-  @Column()
+  @Column({ length: 144, nullable: false })
   password: string;
 
   @Column({
@@ -43,13 +43,13 @@ export class UserEntity {
     nullable: true,
     transformer: phoneTransformer,
   })
-  phone: string;
+  phone?: string;
 
-  @Column({ length: 40 })
-  email: string;
+  @Column({ length: 40, nullable: true })
+  email?: string;
 
-  @Column({ type: 'enum', enum: ['Admin', 'User'] })
-  role: string;
+  @Column({ type: 'enum', enum: ['Admin', 'User'], default: 'User' })
+  role: 'Admin' | 'User';
 
   @CreateDateColumn()
   createdAt: Date;

@@ -13,7 +13,6 @@ import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update_user.dto';
 import { CustomValidationPipe } from './pipes/custom_validation_pipe';
 import { CreateUserDto } from './dto/create_user.dto';
-import { DeleteUserDto } from './dto/delete_user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -34,22 +33,16 @@ export class UsersController {
     @Body(new CustomValidationPipe(CreateUserDto))
     createUserDto: CreateUserDto,
   ) {
-    const user = await this.usersService.create(createUserDto);
-
-    return {
-      success: true,
-      data: user,
-    };
+    return this.usersService.create(createUserDto);
   }
 
-  //create update with typeORM
   @Patch('update/:id')
   update(@Param('id', ParseIntPipe) id, @Body() body: UpdateUserDto) {
     return this.usersService.update(id, body);
   }
 
   @Delete('delete/:id')
-  async delete(@Body() deleteUserDto: DeleteUserDto) {
-    return this.usersService.delete(deleteUserDto.id);
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.delete(id);
   }
 }
